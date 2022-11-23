@@ -3,12 +3,17 @@ import Card from './Card'
 import './ExpenseItem.css'
 
 function ExpenseItem(props){
+  function print() {
+    console.log('clicked!!');
+  }
+
   return (
     <Card className="expense-item">
       <ExpenseDate date={props.date} />
       <div className="expense-item__description">
         <h2> {props.title} </h2>
         <div className="expense-item__price"> $ {props.amount} </div>
+        <button onclick={print}>Click me!</button>
       </div>
     </Card>
   )
