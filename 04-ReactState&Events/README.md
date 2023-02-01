@@ -14,7 +14,7 @@ function ExpenseItem(props){
       <div className="expense-item__description">
         <h2> {props.title} </h2>
         <div className="expense-item__price"> $ {props.amount} </div>
-        <button onclick={clickHandler}>Click me!</button> // eventListener
+        <button onClick={clickHandler}>Click me!</button> // eventListener
       </div>
     </Card>
   )
@@ -42,7 +42,40 @@ It returns an array, the first value is the variable itself and the second varia
 
 > It is convention to use a name for the variable and then to repeat the variable name and add `set` for the returned function.
 
+```JavaScript
+import {useState} from 'react'; // 1.
+import ExpenseDate from './ExpenseDate';
+import Card from './Card'
+import './ExpenseItem.css'
+
+function ExpenseItem(props){
+
+  const [title, setTitle] = useState(props.title); // 2, 3 & 4
+
+  function clickHandler() {
+    setTitle('Updated'); // 5
+    console.log(title);
+  }
+
+  return (
+    <Card className="expense-item">
+      <ExpenseDate date={props.date} />
+      <div className="expense-item__description">
+        <h2> {title} </h2>
+        <div className="expense-item__price"> $ {props.amount} </div>
+        <button onClick={clickHandler}>Click me!</button>
+      </div>
+    </Card>
+  )
+}
+
+export default ExpenseItem;
+
+```
+
 What happens behind the scenes is that we are telling react to re-execute the Component function with the new variable state. This does not happen immediately if we `console.log` the value of the updated variable right on the following line of code we will still see the previous value, React schedules the update and executes it accordingly.
+
+With `State` React will look for changes only in this specific component using the hook. (Not in every component).
 
 ## Hooks notes
 
@@ -50,3 +83,11 @@ What happens behind the scenes is that we are telling react to re-execute the Co
 2. They should not be called inside a nested function.
 3. They usually start with the `use` word.
 
+## State 
+
+`useState` register changes only in this specific component using the hook. (Not in every component). It actually registers it for an specific component instance, if the application uses more than one instance of the same component, ever item receives their own state.
+
+Only the specific instance using the state is reevaluated if there are several similar components only the one which trigger the change will be revaluated.
+
+
+`useState` keeps track of how many times it has been called, this way it knows the initial state registered of each variable (in the example above the first state is props.title).
