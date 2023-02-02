@@ -1,6 +1,17 @@
 # 4 React State and Events
 
-When working with events we can refer to the by adding the type of event and pointing to the proper function. We do not need to call the function with parenthesis since that would execute it right away instead of waiting for the eventListener.
+*The exercise is being develop on the "03-Module/01-starting-setup" application*
+
+## Event Listeners
+
+When working with events we can refer to them by adding the type of event and pointing to the proper function. 
+
+We do not need to call the function with parenthesis since that would execute it right away, instead we want the eventListener to execute it.
+
+Steps:
+1. Create the function which will be executed by the eventListener
+2. Add the event which should be trigger (in this case `onClick`) on the proper HTML element
+3. Give the proper parameters.
 
 ```JavaScript
 
@@ -73,7 +84,8 @@ export default ExpenseItem;
 
 ```
 
-What happens behind the scenes is that we are telling react to re-execute the Component function with the new variable state. This does not happen immediately if we `console.log` the value of the updated variable right on the following line of code we will still see the previous value, React schedules the update and executes it accordingly.
+What happens behind the scenes is that we are telling react to **re-execute the Component function** with the new variable state. 
+However, this does not happen immediately if we `console.log` the value of the updated variable right on the following line of code we will still see the previous value, React schedules the update and executes it accordingly.
 
 With `State` React will look for changes only in this specific component using the hook. (Not in every component).
 
@@ -88,6 +100,5 @@ With `State` React will look for changes only in this specific component using t
 `useState` register changes only in this specific component using the hook. (Not in every component). It actually registers it for an specific component instance, if the application uses more than one instance of the same component, ever item receives their own state.
 
 Only the specific instance using the state is reevaluated if there are several similar components only the one which trigger the change will be revaluated.
-
 
 `useState` keeps track of how many times it has been called, this way it knows the initial state registered of each variable (in the example above the first state is props.title).
