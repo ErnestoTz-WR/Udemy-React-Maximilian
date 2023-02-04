@@ -103,3 +103,123 @@ Only the specific instance using the state is reevaluated if there are several s
 
 `useState` keeps track of how many times it has been called, this way it knows the initial state registered of each variable (in the example above the first state is props.title).
 
+## `useState` for forms
+
+We can use this hook to bind data coming from a form. We have 2 options in this scenario:
+
+1. Multiple `useState` (one for each input).
+2. Single `useState` (only for once submission button).
+
+Each version has its pros and cons.
+
+### Multiple `States`
+
+It can store changes on every input separately which means data loss is not a concern at all. However, we could end up in redundant code.
+
+1. Create a `useState` per input.
+2. Create each function.
+3. Bind the function to its appropriate HTML element.
+
+```JavaScript
+function ExpenseForm() {
+  const [enteredTitle,setEnteredTitle] = useState('');
+  const [enteredAmount,setEnteredAmount] = useState('');
+  const [enteredDate,setEnteredDate] = useState('');
+
+  const titleChangeHandler = (event) => {
+    setEnteredTitle(event.target.value);
+    console.log(enteredTitle);
+  };
+
+  const amountChangeHandler = (event) => {
+    setEnteredAmount(event.target.value);
+    console.log(enteredAmount);
+  };
+
+  const dateChangeHandler = (event) => {
+    setEnteredDate(event.target.value);
+    console.log(enteredDate);
+  }
+  return(
+    <form>
+      <div className="new-expense__controls">
+        <div className="new-expense__control">
+          <label>Title</label>
+          <input type='text' onChange={titleChangeHandler}/>
+        </div>
+        <div className="new-expense__control">
+          <label>Amount</label>
+          <input type='number'min="0.01" step="0.01" onChange={amountChangeHandler}/>
+        </div>
+        <div className="new-expense__control">
+          <label>Date</label>
+          <input type='date' min="2023-01-01" max="2025-12-31" onChange={dateChangeHandler}/>
+        </div>
+      </div>
+      <div className="new-expense__actions">
+        <button type="submit">Add Expense</button>
+      </div>
+    </form>
+  );
+}
+```
+
+### Single `useState`
+
+It provides a cleaner code but we need to make sure that all data and previous state is stored properly.
+
+1. Create a single state, this will require a unique `input` variable and an object as a parameter for `useState`,
+2. Inside the object we declare each input,
+3. Create a function per input,
+4. On every function we copy first the previous state of the object and then update the variable which changed.
+
+```JavaScript
+function ExpenseForm() {
+  const [userInput, setUserInput] = useState({
+    enteredTitle: '',
+    enteredAmount: '',
+    enteredDate: ''
+  });
+
+  const titleChangeHandler = (event) => {
+    setUserInput((prevState) => {
+      return { ...prevState, enteredTitle: event.target.value };
+    });
+  };
+
+  const amountChangeHandler = (event) => {
+     setUserInput((prevState) => {
+      return {...prevState, enteredAmount: event.target.value };
+    });
+  };
+
+  const dateChangeHandler = (event) => {
+     setUserInput((prevState) => {
+      return {...prevState, enteredDate: event.target.value };
+    });
+  }
+  return(
+    <form>
+      <div className="new-expense__controls">
+        <div className="new-expense__control">
+          <label>Title</label>
+          <input type='text' onChange={titleChangeHandler}/>
+        </div>
+        <div className="new-expense__control">
+          <label>Amount</label>
+          <input type='number'min="0.01" step="0.01" onChange={amountChangeHandler}/>
+        </div>
+        <div className="new-expense__control">
+          <label>Date</label>
+          <input type='date' min="2023-01-01" max="2025-12-31" onChange={dateChangeHandler}/>
+        </div>
+      </div>
+      <div className="new-expense__actions">
+        <button type="submit">Add Expense</button>
+      </div>
+    </form>
+  );
+}
+```
+
+> **NOTE:** This `prevState` syntax forces React to return the actual previous state of the application, if not we could end up working with a previous state which belong 2 or 3 past states since it was schedule to be executed later. It is explained on the vide 55.
