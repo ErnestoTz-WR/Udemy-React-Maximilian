@@ -89,16 +89,17 @@ However, this does not happen immediately if we `console.log` the value of the u
 
 With `State` React will look for changes only in this specific component using the hook. (Not in every component).
 
-## Hooks notes
+### Hooks notes
 
-1. They should be executed inside the Component function.
-2. They should not be called inside a nested function.
-3. They usually start with the `use` word.
+* They should be executed inside the Component function.
+* They should not be called inside a nested function.
+* They usually start with the `use` word.
 
-## State 
+### State 
 
 `useState` register changes only in this specific component using the hook. (Not in every component). It actually registers it for an specific component instance, if the application uses more than one instance of the same component, ever item receives their own state.
 
 Only the specific instance using the state is reevaluated if there are several similar components only the one which trigger the change will be revaluated.
 
 `useState` keeps track of how many times it has been called, this way it knows the initial state registered of each variable (in the example above the first state is props.title).
+
