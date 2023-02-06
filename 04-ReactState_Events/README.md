@@ -223,3 +223,119 @@ function ExpenseForm() {
 ```
 
 > **NOTE:** This `prevState` syntax forces React to return the actual previous state of the application, if not we could end up working with a previous state which belong 2 or 3 past states since it was schedule to be executed later. It is explained on the vide 55.
+
+## Two way binding
+In order to create a two way binding we simply need to add the `value` attribute to the HTML element with the appropriate variable (in this case `enteredTitle`, `enteredAmount` and `enteredDate`):
+
+```JavaScript
+return (
+  <form onSubmit={submitHandler}>
+    <div className="new-expense__controls">
+      <div className="new-expense__control">
+        <label>Title</label>
+        <input
+          type="text"
+          onChange={titleChangeHandler}
+          value={enteredTitle} // 2 way binding 
+        />
+      </div>
+      <div className="new-expense__control">
+        <label>Amount</label>
+        <input
+          type="number"
+          min="0.01"
+          step="0.01"
+          value={enteredAmount} // 2 way binding
+          onChange={amountChangeHandler}
+        />
+      </div>
+      <div className="new-expense__control">
+        <label>Date</label>
+        <input
+          type="date"
+          min="2023-01-01"
+          max="2025-12-31"
+          value={enteredDate} // 2 way binding
+          onChange={dateChangeHandler}
+        />
+      </div>
+    </div>
+    <div className="new-expense__actions">
+      <button type="submit">Add Expense</button>
+    </div>
+  </form>
+);
+```
+
+## Child-to-parent component communication (bottom up)
+
+We basically create an eventListener on the parent component which will be trigger by the child component. This event listener will be passed as a `prop`. We can't skip component communication so we have to pass props through each intermediate component.
+
+> One convention which can help is to save the prop as `"on-The Action to be Listen to"` (in this case `onSaveExpenseData`\ `onAddExpense` which refers to the submit button of a new expense item).
+
+Steps:
+1. Create the eventListener method on the parent/intermediate component, we can receive information for this method as parameters (this information will come from the child component).
+2. Pass the created method as a `prop`
+3. On the child component get the all the `props`
+4. Execute the event on the desired placed and pass the necessary data.
+
+```JavaScript
+// ***************** Parent/Intermediate component ************
+function NewExpense() {
+
+  //1.
+  const saveExpenseDataHandler = (enteredExpenseData) => {
+    const expenseData = {
+      ...enteredExpenseData,
+      id: Math.random.toString()
+    }
+    console.log(expenseData);
+  }
+
+  return(
+    //2.
+    <div className="new-expense">
+      <ExpenseForm onSaveExpenseData={saveExpenseDataHandler}/>
+    </div>
+  );
+}
+
+// ****************** Child component *************
+
+function ExpenseForm(props) { //3.
+  const [enteredTitle, setEnteredTitle] = useState("");
+  const [enteredAmount, setEnteredAmount] = useState("");
+  const [enteredDate, setEnteredDate] = useState("");
+
+  const titleChangeHandler = (event) => {
+    setEnteredTitle(event.target.value);
+  };
+
+  const amountChangeHandler = (event) => {
+    setEnteredAmount(event.target.value);
+  };
+
+  const dateChangeHandler = (event) => {
+    setEnteredDate(event.target.value);
+  };
+
+  const submitHandler = (event) => {
+    event.preventDefault();
+    const expenseData = {
+      title: enteredTitle,
+      amount: enteredAmount,
+      date: new Date(enteredDate),
+    };
+    props.onSaveExpenseData(expenseData); //4.
+    setEnteredTitle('');
+    setEnteredAmount('');
+    setEnteredDate('');
+  };
+```
+
+## "Lifting the Sate up"
+
+We can only communicate from child to parent component. 
+
+Communication between "sibling" components is not possible. That's why we need to use the closest element related to both components.   
+We will store the state there and either modify the provided data or we can also pass it to the child component which will modify it.
