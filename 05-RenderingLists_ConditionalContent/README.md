@@ -2,6 +2,8 @@
 
 *The exercise is being develop on the "03-Module/01-starting-setup" application*
 
+A final version of the application is found on this module.
+
 ## Display dynamic Lists
 
 We use `.map` which is a built-in function from arrays. This will allow us to copy every element inside the array and map it to another specific object (in this case a Custom Component)
