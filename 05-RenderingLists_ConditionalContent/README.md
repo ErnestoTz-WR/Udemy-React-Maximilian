@@ -35,7 +35,6 @@ function Expenses(props) {
 }
 
 export default Expenses;
-
 ```
 
 ## Using Stateful Lists
@@ -86,5 +85,92 @@ function App() {
 }
 
 export default App;
+```
+
+## Understanding `keys` for Lists
+
+When rendering lists React needs to be able to identify each element of the list uniquely; if not it will see that each element is similar to each other and update every value inside een when we only added a new element at the end. This can lead to errors and bugs. For this reason, we need to use `keys` to identify each element inside the list.
+
+```JavaScript
+function Expenses(props) {
+  return (
+    <div>
+      <Card className="expenses">
+        <ExpensesFilter
+          selected={filteredYear}
+          onYearFilter={onYearFilterHandler}
+        />
+        {props.expenses.map((expense) => ( //Dynamic List 
+          <ExpenseItem
+            key={expense.id} // KEY
+            title={expense.title}
+            amount={expense.amount}
+            date={expense.date}
+          />
+        ))}
+      </Card>
+    </div>
+  );
+}
+
+export default Expenses;
+```
+
+## Conditional Content
+
+There are different approaches to render conditional data in React (check [the documentation](https://reactjs.org/docs/conditional-rendering.html) or [this article](https://www.w3schools.com/react/react_conditional_rendering.asp)).
+
+The most common ways to render conditional data are:
+
+1. Using && conditionals next to the rendered components.
+2. Takin the logic outside of the rendered information and call the desired function/property storing the data to be rendered.
+
+```JavaScript 
+// ******** Option 1. Logic inside the return part
+return (
+  <div>
+    <Card className="expenses">
+      <ExpensesFilter
+        selected={filteredYear}
+        onYearFilter={onYearFilterHandler}
+      />
+      {filteredExpenses.length === 0 && <p>No expenses found.</p>}
+      {filteredExpenses.length > 0 &&
+        filteredExpenses.map((expense) => (
+          <ExpenseItem
+            key={expense.id}
+            title={expense.title}
+            amount={expense.amount}
+            date={expense.date}
+          />
+        ))}
+    </Card>
+  </div>
+);
+
+// ********* Option 2. Logic outside.
+let expenseContent = <p>No expenses found.</p>;
+if (filteredExpenses.length > 0 ) {
+  expenseContent = filteredExpenses.map((expense) => (
+    <ExpenseItem
+      key={expense.id}
+      title={expense.title}
+      amount={expense.amount}
+      date={expense.date}
+    />
+  ))
+}
+
+return (
+  <div>
+    <Card className="expenses">
+      <ExpensesFilter
+        selected={filteredYear}
+        onYearFilter={onYearFilterHandler}
+      />
+      {expenseContent}
+    </Card>
+  </div>
+);
 ```
 
