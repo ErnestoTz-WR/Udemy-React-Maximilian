@@ -102,3 +102,39 @@ Why?
 
 Because now the **effect function would re-run whenever ANY property** of `someObject` changes - not just the one property (`someProperty` in the above example) our effect might depend on.
 
+## Context
+
+It helps us when we have information provided by a component which is deep inside the Application Tree and it that information is required in another component.Instead of using `props` all the way around we use **context** to inject that information.
+
+It is **used to pass information between Components instead of using `props`**. However, **we should NOT use context on every case**. `props` is the recommended way, some specific cases will required to use context.
+
+Steps:
+
+- Create a new folder (`store`), we will define the context here.
+- Create a file which will include the definition (similar to an interface) of what that context should include (what properties, functions, etc.)
+- Wrap what part of the application should be **"linked"** to this data.
+- We can use the `useContext` hook to make the syntax more clear and readable.
+- Import `useContext` on the element using the context; call the context which will be able to point to the specific data.
+
+```JS
+//  './store/auth-context.js'
+
+import React from 'react';
+
+const AuthContext = React.createContext({
+  isLoggedIn: false
+});
+
+export default AuthContext;
+```
+
+## Rules of Hooks
+
+1. **Only call React Hooks in React Functions** - we should not call hooks from functions which are NOT inside the component function.
+2. **Only call React Hooks at the Top Level** - We should not call hooks inside statements or nested functions.
+3. (Unofficial) **ALWAYS add everything you refer to inside of `useEffect()` as a dependency**
+
+
+## Module Slides
+
+[Click here](./slides.pdf)
