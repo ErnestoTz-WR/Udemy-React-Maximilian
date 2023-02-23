@@ -1,6 +1,6 @@
 # 10 Advanced: Handling Side Effects, Using Reducers & Using the Context API
 
-### Side effects
+## Side effects
 
 This is how we can work with asynchronous tasks (http request, etc).
 
@@ -8,7 +8,8 @@ These tasks might be related to the Component but many of them should not execut
 
 ### `useEffect` hook
 
-A function which is called with 2 parameters : 
+A function which is called with 2 parameters :
+
 1. Function - (What we want to execute)
 2. Array with dependencies - (We will run the function every time one of the dependencies changes)
 
@@ -51,12 +52,101 @@ So long story short: You must add all "things" you use in your effect function *
 
 Very helpful function to not send many request which might be triggered by the user changes. **(Check video 113)**
 
-
 ## `useReducer()` hook
 
 It is used as a **replacement** to `useState()` when we need a "more powerful state management". It is also **more complex to set up**.
 
 **The majority of the cases we should use `useState()`**, however, there are some specific scenarios in which `useReducer()` is the best fit. for example when the `state` of a property depends on another `state` from another property.
+
+In the reducer functions we receive automatically from React the `state` (last state snapshot of the state managed by the reducer) and `action` (we usually pass here the action to be executed "ADD", "REMOVE", etc.) as parameters.
+
+> This function will return a new state snapshot.
+
+Steps: 
+1. import `useReducer` from `react`
+2. Create the `Reducer` function (in this case `const groupReducer = (state, action) => {}`)
+3. Define an initial state (in this case`defaultGroupState`) and return it on the `Reducer` function
+4. Inside the Custom Component function call the `useReducer` function with the `Reducer` function as the first parameter and the `initial State` as the second parameter (In this case `useReducer(groupReducer,defaultGroupState)`)
+5. Dispatch the `action` object inside the appropriate function in this case `addPerson` will dispatch  `setGroupState({ type: 'ADD', item: person })`
+6. Add the logic for each `action` inside the `Reducer` function, **return the new state**
+7. (Optional) - In case of using Context as well to pass the state:
+- import the context on the other component which will use
+- Stablish a connection between the `contextFile` and `useContext`
+
+```JS
+// Group.js
+import {useReducer} from 'react'; //1.
+
+const defaultGroupState = { //3.
+  people: [], 
+  amount: 0
+};
+
+const groupReducer = (state, action) => { //2.
+
+  if (action.type === 'ADD') { //6.
+    const updatedGroup = state.people.push(action.item);
+    const updatedAmount = state.people.length();
+    return {
+      people: updatedGroup,
+      amount: updatedAmount
+    }
+  }
+
+  return defaultGroupState; // 3. We return the default state on the first execution
+}
+
+const Group = props => {
+
+  const [groupState, setGroupState] = useReducer(groupReducer,defaultGroupState); //4.
+
+  const addPerson = person => { //5.
+    setGroupState({
+      type: 'ADD',
+      item: person
+    });
+  }
+
+  const removePerson = id => {
+    setGroupState({
+      type: 'REMOVE',
+      item: id
+    });
+  }
+
+  return (
+    <div>
+      <ul>
+        {groupState.map(person => {
+          <p>Name: {name}</p>
+          <p>Age: {age}</p>
+        })}
+      </ul>
+    </div>
+  )
+}
+
+
+// AddPersonForm.js
+import {useContext} from 'react'
+
+import groupContext from '../store/Group'
+
+
+const AddPersonForm = props => {
+
+  const groupCtx = useContext(groupContext); //8.
+
+  return (
+    <form submit="">
+      <label>Name: </label>
+      <input id="name">
+      <button>Submit</button>
+    </form>
+  );
+}
+
+```
 
 ## Object destructuring
 
@@ -98,6 +188,7 @@ useEffect(() => {
   // code that only uses someProperty ...
 }, [someObject]);
 ```
+
 Why?
 
 Because now the **effect function would re-run whenever ANY property** of `someObject` changes - not just the one property (`someProperty` in the above example) our effect might depend on.
@@ -110,11 +201,12 @@ It is **used to pass information between Components instead of using `props`**. 
 
 Steps:
 
-- Create a new folder (`store`), we will define the context here.
-- Create a file which will include the definition (similar to an interface) of what that context should include (what properties, functions, etc.)
-- Wrap what part of the application should be **"linked"** to this data.
+- Create a new folder (`store`), we will define the context here,
+- Create a file which will include the definition (similar to an interface) of what that context should include (what properties, functions, etc.) `context-object.js`
+- Wrap what part of the application should be **"linked"** to this data. `<ObjectContext.Provider>`
 - We can use the `useContext` hook to make the syntax more clear and readable.
 - Import `useContext` on the element using the context; call the context which will be able to point to the specific data.
+- Stablish a connection between the `contextFile` and `useContext`
 
 ```JS
 //  './store/auth-context.js'
@@ -133,7 +225,6 @@ export default AuthContext;
 1. **Only call React Hooks in React Functions** - we should not call hooks from functions which are NOT inside the component function.
 2. **Only call React Hooks at the Top Level** - We should not call hooks inside statements or nested functions.
 3. (Unofficial) **ALWAYS add everything you refer to inside of `useEffect()` as a dependency**
-
 
 ## Module Slides
 
