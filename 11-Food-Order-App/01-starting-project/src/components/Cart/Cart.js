@@ -13,7 +13,6 @@ const Cart = (props) => {
   const totalAmount = cartCtx.totalAmount.toFixed(2);
 
   const addToCartHandler = item => {
-    console.log(item);
     cartCtx.addItem({...item, amount: 1});
   };
 
