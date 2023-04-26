@@ -56,7 +56,7 @@ Additionally, we can keep track of the request by creating different states (`lo
 ## `useEffect()` for fetching data
 
 In many cases we want to fetch data once one of the components has been rendered. For this we use `useEffect()` in addition to `useCallback()`.   
-As we know functions are objects and every time a component is regenerated it creates a completly new function object. This makes using `useEffect()` useless since we would need to point at the function as a dependency but since every time we render the component we get a new function it will run the component function again, creating a new function, which restarts the process creating an infinite loop. If we wrap the function with `useCallback` we declare that a single function should be created and only that function is relevant to that component.
+As we know functions are objects and every time a component is regenerated it creates a completely new function object. This makes using `useEffect()` useless since we would need to point at the function as a dependency but since every time we render the component we get a new function it will run the component function again, creating a new function, which restarts the process creating an infinite loop. If we wrap the function with `useCallback` we declare that a single function should be created and only that function is relevant to that component.
 
 ```JS
 import React, { useState, useEffect, useCallback } from "react";
