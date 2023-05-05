@@ -21,3 +21,8 @@ We store the state of the input with every keystroke change.
 ## Third party libraries for form validations
 
 - [Formik](https://formik.org)
+
+
+## Useful links
+
+- [A Custom Hook for Managing Forms in React](https://academind.com/tutorials/reactjs-a-custom-useform-hook/)
