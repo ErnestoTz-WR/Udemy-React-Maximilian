@@ -4,6 +4,8 @@
 
 We are using [React Router](https://reactrouter.com/en/main) which is the most used third party library.
 
+`npm install react-router-dom`
+
 ## What is routes?
 
 Routes are simply path -> component mappings. The idea behind is to ask: **For which path should which component be loaded?**
@@ -229,7 +231,8 @@ Dynamic paths are created when we give some dynamic information into the path (e
 1. Add dynamic paths by including a colon `:` on the object definition path, this indicate the dynamic part,
 2. After the colon we will include the identifier which should be use to relate to the dynamic part,
 3. Import `useParams` on the page which sends back the dynamic data,
-4. Call the `useParams` object.
+4. Call the `useParams` object,
+5. Include the proper `Link` to change the path.
 
 
 
@@ -248,7 +251,7 @@ const router = createBrowserRouter([
   },
 ]);
 
-// ----------- Products Page ---------
+// ----------- Product Details Page ---------
 import { useParams } from "react-router-dom"; // 3.
 
 function ProductDetailPage() {
@@ -263,6 +266,32 @@ function ProductDetailPage() {
 }
 
 export default ProductDetailPage;
+
+// ------------ Products Page -----------
+import { Link } from "react-router-dom";
+
+function HomePage() {
+  const products = [
+    { id: "p1", title: "Product 1" },
+    { id: "p2", title: "Product 2" },
+    { id: "p3", title: "Product 3" },
+  ];
+
+  return (
+    <>
+      <h1>My Products</h1>
+      <ul>
+        {products.map((pr) => 
+          <li key={pr.id}>
+            <Link to={`/products/${pr.id}`}>{pr.title}</Link>
+          </li>
+        )}
+      </ul>
+    </>
+  );
+}
+
+export default HomePage;
 ```
 
 ## Relative vs Absolute paths
