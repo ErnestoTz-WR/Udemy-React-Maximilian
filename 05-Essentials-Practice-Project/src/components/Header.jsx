@@ -1,4 +1,3 @@
-import React from 'react'
 import imageSrc from '../assets/investment-calculator-logo.png'
 
 export default function Header() {
