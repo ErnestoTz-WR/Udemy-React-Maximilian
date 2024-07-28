@@ -1,6 +1,12 @@
+import Header from "./components/Header"
+import FormSection from "./components/FormSection"
+
 function App() {
   return (
-    <h1>React Investment Calculator</h1>
+    <>
+      <Header/>
+      <FormSection/>
+    </>
   )
 }
 
