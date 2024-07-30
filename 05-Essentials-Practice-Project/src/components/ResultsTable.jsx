@@ -16,11 +16,11 @@ export default function ResultsTable({data}) {
       </thead>
       <tbody>
         {results.map((item) => (
-          <tr>
+          <tr key={item.year}>
             <td>{item.year}</td>
             <td>{formatter.format(item.valueEndOfYear)}</td>
-            <td>{formatter.format(item.annualInvestment)}</td>
             <td>{formatter.format(item.interest)}</td>
+            <td>{formatter.format(item.annualInvestment)}</td>
             <td>{formatter.format(item.investedCapital)}</td>
           </tr>
         ))}

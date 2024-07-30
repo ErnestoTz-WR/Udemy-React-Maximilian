@@ -4,7 +4,7 @@ import FormSection from "./components/FormSection";
 import ResultsTable from "./components/ResultsTable";
 
 const INITIAL_STATE = {
-  initialInvestment: 15000,
+  initialInvestment: 10000,
   annualInvestment: 1200,
   expectedReturn: 6,
   duration: 10,
@@ -18,7 +18,7 @@ const [investmentData, setInvestmentData] = useState(INITIAL_STATE);
   const { id, value } = change;
   setInvestmentData((prevData) => {
     const updatedData = {...prevData};
-    updatedData[id] = value;
+    updatedData[id] = +value;
     return updatedData;
   });
  }
